@@ -1,8 +1,9 @@
 module RayTracer
   class Scene
-    def initialize(width, height)
+    def initialize(width, height, camera)
       @width = width
       @height = height
+      @camera = camera
     end
 
     def render(file="output.ppm")
@@ -13,17 +14,30 @@ module RayTracer
 
         (0...@height).reverse_each do |y|
           (0...@width).each do |x|
-            r = x / @width.to_f
-            g = y / @height.to_f
-            b = 0.2
+            i = x / @width.to_f
+            j = y / @height.to_f
 
-            r = (255.99 * r).truncate
-            g = (255.99 * g).truncate
-            b = (255.99 * b).truncate
+            ray = @camera.ray(i, j)
+            col = color(ray)
+
+            r = (255.99 * col[0]).truncate
+            g = (255.99 * col[1]).truncate
+            b = (255.99 * col[2]).truncate
 
             f << "#{r} #{g} #{b}\n"
           end
         end
+      end
+    end
+
+    private
+
+    def color(ray)
+      sphere = Sphere.new(Vector[0, 0, 0], 0.5)
+      if sphere.hit(ray, 0.001, Float::INFINITY)
+        Vector[1, 0, 0]
+      else
+        Vector[1, 1, 1]
       end
     end
   end

@@ -17,7 +17,7 @@ module RayTracer
 
     def ray(u, v)
       direction = @lower_left_corner + u * @horizontal + v * @vertical - @origin
-      Ray.new(@origin, @direction)
+      Ray.new(@origin, direction)
     end
   end
 end
