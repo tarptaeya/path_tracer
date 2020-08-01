@@ -1,4 +1,6 @@
 module RayTracer
+  MAX_DEPTH = 10
+
   class Scene
     def initialize(width, height, camera, world)
       @width = width
@@ -47,16 +49,21 @@ module RayTracer
 
     private
 
-    def color(ray)
+    def color(ray, depth=0)
       if rec = @world.hit(ray, 0.001, Float::INFINITY)
         material = rec.material
-        if scatter = material.scatter(ray, rec)
+        if depth < MAX_DEPTH and scatter = material.scatter(ray, rec)
           attenuation, scattered = scatter
-          return attenuation * color(scattered)
+          attenuation * color(scattered, depth + 1)
+        else
+          Vector[0, 0, 0]
         end
+      else
+        # skybox
+        d = ray.direction.normalize
+        t = 0.5 * (d[1] + 1)
+        (1 - t) * Vector[1, 1, 1] + t * Vector[0.5, 0.7, 1.0]
       end
-
-      return Vector[1, 1, 1]
     end
   end
 end
