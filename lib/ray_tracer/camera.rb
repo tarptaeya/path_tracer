@@ -1,5 +1,3 @@
-require 'matrix'
-
 module RayTracer
   class Camera
     def initialize(lookfrom, lookat, vup, vfov, aspect)

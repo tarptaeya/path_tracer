@@ -39,11 +39,15 @@ module RayTracer
     private
 
     def color(ray)
-      if @world.hit(ray, 0.001, Float::INFINITY)
-        Vector[1, 0, 0]
-      else
-        Vector[1, 1, 1]
+      if rec = @world.hit(ray, 0.001, Float::INFINITY)
+        material = rec.material
+        if scatter = material.scatter(ray, rec)
+          attenuation, scattered = scatter
+          return attenuation * color(scattered)
+        end
       end
+
+      return Vector[1, 1, 1]
     end
   end
 end

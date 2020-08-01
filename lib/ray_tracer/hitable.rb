@@ -1,6 +1,6 @@
 module RayTracer
   class HitRecord
-    attr_accessor :t, :p, :n
+    attr_accessor :t, :p, :n, :material
   end
 end
 
@@ -15,9 +15,10 @@ module RayTracer
   class Sphere < Hitable
     attr_reader :center, :radius
 
-    def initialize(center, radius)
+    def initialize(center, radius, material)
       @center = center
       @radius = radius
+      @material = material
     end
 
     def hit(ray, t_min, t_max)
@@ -50,7 +51,9 @@ module RayTracer
       rec.t = t
       rec.p = ray.point(t)
       rec.n = (rec.p - @center) / @radius.to_f
+      rec.material = @material
+
+      rec
     end
   end
 end
-
