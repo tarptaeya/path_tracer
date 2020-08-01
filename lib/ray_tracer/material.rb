@@ -34,13 +34,14 @@ end
 
 module RayTracer
   class Metal < Material
-    def initialize(albedo)
+    def initialize(albedo, fuzz=0)
       @albedo = albedo
+      @fuzz = fuzz
     end
 
     def scatter(ray, rec)
       reflected = reflect(ray.direction.normalize, rec.n)
-      scattered = Ray.new(rec.p, reflected)
+      scattered = Ray.new(rec.p, reflected + @fuzz * random_in_unit_sphere)
       if scattered.direction.dot(rec.n) > 0
         [@albedo, scattered]
       else
