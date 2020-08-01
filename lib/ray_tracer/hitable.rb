@@ -30,7 +30,7 @@ module RayTracer
       if d > 0
         temp = (-b - d ** 0.5) / a
         if temp < t_max and temp > t_min
-          rec = popupate_hit_record(ray, temp)
+          rec = populate_hit_record(ray, temp)
           return rec
         end
 
@@ -46,7 +46,7 @@ module RayTracer
 
     private
 
-    def popupate_hit_record(ray, t)
+    def populate_hit_record(ray, t)
       rec = HitRecord.new
       rec.t = t
       rec.p = ray.point(t)

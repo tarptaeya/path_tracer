@@ -38,9 +38,9 @@ module RayTracer
         (0...@height).reverse_each do |y|
           (0...@width).each do |x|
             col = data[y * @width + x]
-            r = (255.99 * col[0]).truncate
-            g = (255.99 * col[1]).truncate
-            b = (255.99 * col[2]).truncate
+            r = (255.99 * col[0] ** 0.5).truncate
+            g = (255.99 * col[1] ** 0.5).truncate
+            b = (255.99 * col[2] ** 0.5).truncate
             f << "#{r} #{g} #{b}\n"
           end
         end
