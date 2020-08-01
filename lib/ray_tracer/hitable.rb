@@ -57,3 +57,24 @@ module RayTracer
     end
   end
 end
+
+module RayTracer
+  class HitableList < Hitable
+    def initialize(objects)
+      @objects = objects
+    end
+
+    def hit(ray, t_min, t_max)
+      t_curr = t_max
+      rec = nil
+      for obj in @objects
+        if rec1 = obj.hit(ray, t_min, t_curr)
+          rec = rec1
+          t_curr = rec.t
+        end
+      end
+
+      rec
+    end
+  end
+end
