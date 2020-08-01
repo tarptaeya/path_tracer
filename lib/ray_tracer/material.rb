@@ -27,7 +27,7 @@ module RayTracer
     def scatter(ray, rec)
       target = rec.p + rec.n + random_in_unit_sphere
       scattered = Ray.new(rec.p, target - rec.p)
-      attenuation = @albedo.value(0, 0, rec.p)
+      attenuation = @albedo.value(rec.u, rec.v, rec.p)
       [attenuation, scattered]
     end
   end
@@ -44,7 +44,7 @@ module RayTracer
       reflected = reflect(ray.direction.normalize, rec.n)
       scattered = Ray.new(rec.p, reflected + @fuzz * random_in_unit_sphere)
       if scattered.direction.dot(rec.n) > 0
-        attenuation = @albedo.value(0, 0, rec.p)
+        attenuation = @albedo.value(rec.u, rec.v, rec.p)
         [attenuation, scattered]
       else
         nil

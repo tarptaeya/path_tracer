@@ -1,6 +1,7 @@
 module RayTracer
   class HitRecord
-    attr_accessor :t, :p, :n, :material
+    attr_accessor :t, :p, :n, :material,
+      :u, :v
   end
 end
 
@@ -52,6 +53,15 @@ module RayTracer
       rec.p = ray.point(t)
       rec.n = (rec.p - @center) / @radius.to_f
       rec.material = @material
+
+      # uv mapping
+      x = (rec.p[0] - @center[0]) / @radius.to_f
+      y = (rec.p[1] - @center[1]) / @radius.to_f
+      z = (rec.p[2] - @center[2]) / @radius.to_f
+      phi = Math.atan2(x, z)
+      theta = Math.asin(y)
+      rec.u = phi / (2 * Math::PI)
+      rec.v = theta / Math::PI
 
       rec
     end
