@@ -3,6 +3,10 @@ module RayTracer
     def scatter(ray, rec)
     end
 
+    def emitted(u, v, p)
+      Vector[0, 0, 0]
+    end
+
     private
 
     def random_in_unit_sphere
@@ -49,6 +53,22 @@ module RayTracer
       else
         nil
       end
+    end
+  end
+end
+
+module RayTracer
+  class DiffuseLight < Material
+    def initialize(emit)
+      @emit = emit
+    end
+
+    def scatter(ray, rec)
+      nil
+    end
+
+    def emitted(u, v, p)
+      @emit.value(u, v, p)
     end
   end
 end

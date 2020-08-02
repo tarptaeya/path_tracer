@@ -52,17 +52,15 @@ module RayTracer
     def color(ray, depth=0)
       if rec = @world.hit(ray, 0.001, Float::INFINITY)
         material = rec.material
+        emitted = material.emitted(rec.u, rec.v, rec.p)
         if depth < MAX_DEPTH and scatter = material.scatter(ray, rec)
           attenuation, scattered = scatter
-          attenuation * color(scattered, depth + 1)
+          emitted + attenuation * color(scattered, depth + 1)
         else
-          Vector[0, 0, 0]
+          emitted
         end
       else
-        # skybox
-        d = ray.direction.normalize
-        t = 0.5 * (d[1] + 1)
-        (1 - t) * Vector[1, 1, 1] + t * Vector[0.5, 0.7, 1.0]
+        Vector[0, 0, 0]
       end
     end
   end
