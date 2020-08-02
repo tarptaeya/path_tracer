@@ -53,7 +53,7 @@ module RayTracer
       if rec = @world.hit(ray, 0.001, Float::INFINITY)
         material = rec.material
         emitted = material.emitted(rec.u, rec.v, rec.p)
-        if depth < MAX_DEPTH and scatter = material.scatter(ray, rec)
+        if depth < MAX_DEPTH && scatter = material.scatter(ray, rec)
           attenuation, scattered = scatter
           emitted + attenuation * color(scattered, depth + 1)
         else

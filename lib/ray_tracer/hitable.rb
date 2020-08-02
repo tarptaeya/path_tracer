@@ -78,13 +78,13 @@ module RayTracer
       d = b * b - a * c
       if d > 0
         temp = (-b - d ** 0.5) / a
-        if temp < t_max and temp > t_min
+        if temp < t_max && temp > t_min
           rec = populate_hit_record(ray, temp)
           return rec
         end
 
         temp = (-b + d ** 0.5) / a
-        if temp < t_max and temp > t_min
+        if temp < t_max && temp > t_min
           rec = populate_hit_record(ray, temp)
           return rec
         end
@@ -109,6 +109,53 @@ module RayTracer
       rec.v = (theta + Math::PI / 2) / Math::PI
 
       rec
+    end
+  end
+end
+
+module RayTracer
+  class Triangle < Hitable
+    def initialize(p, material)
+      @p = p
+      @material = material
+
+      min = Vector[
+        p.map {|i| i[0]}.min,
+        p.map {|i| i[1]}.min,
+        p.map {|i| i[2]}.min,
+      ]
+      max = Vector[
+        p.map {|i| i[0]}.max,
+        p.map {|i| i[1]}.max,
+        p.map {|i| i[2]}.max,
+      ]
+      @bounding_box = AABB.new(min, max)
+    end
+
+    def hit(ray, t_min, t_max)
+      n = (@p[1] - @p[0]).cross(@p[2] - @p[0]).normalize
+      t = (@p[0] - ray.origin).dot(n) / ray.direction.dot(n)
+      if t > t_min && t < t_max
+        p = ray.point(t)
+        hit = true
+        hit = hit && ((@p[1] - @p[0]).cross(p - @p[0])).dot(n) >= 0
+        hit = hit && ((@p[2] - @p[1]).cross(p - @p[1])).dot(n) >= 0
+        hit = hit && ((@p[0] - @p[2]).cross(p - @p[2])).dot(n) >= 0
+
+        if hit
+          rec = HitRecord.new
+          rec.t = t
+          rec.p = p
+          rec.n = n
+          rec.n *= -1 if ray.direction.dot(n) >= 0
+          rec.material = @material
+          # todo u, v
+
+          return rec
+        end
+      end
+
+      nil
     end
   end
 end
@@ -169,13 +216,13 @@ module RayTracer
         left_hit = false
         right_hit = false
 
-        if @left and  rec1 = @left.hit(ray, t_min, t)
+        if @left &&  rec1 = @left.hit(ray, t_min, t)
           left_hit = true
           rec = rec1
           t = rec.t
         end
 
-        if @right and rec1 = @right.hit(ray, t_min, t)
+        if @right && rec1 = @right.hit(ray, t_min, t)
           right_hit = true
           rec = rec1
           t = rec.t
