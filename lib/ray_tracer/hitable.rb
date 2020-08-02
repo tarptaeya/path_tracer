@@ -161,6 +161,45 @@ module RayTracer
 end
 
 module RayTracer
+  class TriangleMesh < Hitable
+    def initialize(file, material)
+      @triangles = load_obj_file(file, material)
+      @hitable = BVHNode.from_list(@triangles)
+      @bounding_box = @hitable.bounding_box
+    end
+
+    def hit(ray, t_min, t_max)
+      @hitable.hit(ray, t_min, t_max)
+    end
+
+    private
+
+    def load_obj_file(file, material)
+      vertices = []
+      triangles = []
+
+      File.open(file) do |f|
+        f.each_line do |line|
+          line = line.strip.gsub(/\s+/, " ").split
+          case line.first
+          when "v"
+            v = line.drop(1).map(&:to_f)
+            vertices << Vector[*v]
+          when "f"
+            f = line.drop(1)
+              .map {|i| i.split("/").first.to_i - 1}
+            p = f.map {|i| vertices[i]}
+            triangles << Triangle.new(p, material)
+          end
+        end
+      end
+
+      triangles
+    end
+  end
+end
+
+module RayTracer
   class HitableList < Hitable
     def initialize(objects)
       @objects = objects
