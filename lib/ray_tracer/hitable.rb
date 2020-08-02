@@ -14,6 +14,23 @@ module RayTracer
       @max = max
     end
 
+    def +(other)
+      b0 = self
+      b1 = other
+      min = Vector[
+        [b0.min[0], b1.min[0]].min,
+        [b0.min[1], b1.min[1]].min,
+        [b0.min[2], b1.min[2]].min,
+      ]
+      max = Vector[
+        [b0.max[0], b1.max[0]].max,
+        [b0.max[1], b1.max[1]].max,
+        [b0.max[2], b1.max[2]].max,
+      ]
+      
+      AABB.new(min, max)
+    end
+
     def hit(ray, t_min, t_max)
       for i in 0..2
         inv_d = 1.0 / ray.direction[i]
@@ -32,10 +49,9 @@ end
 
 module RayTracer
   class Hitable
-    def hit(ray, t_min, t_max)
-    end
+    attr_reader :bounding_box
 
-    def bounding_box
+    def hit(ray, t_min, t_max)
     end
   end
 end
@@ -48,6 +64,10 @@ module RayTracer
       @center = center
       @radius = radius
       @material = material
+
+      min = @center - @radius * Vector[1, 1, 1]
+      max = @center + @radius * Vector[1, 1, 1]
+      @bounding_box = AABB.new(min, max)
     end
 
     def hit(ray, t_min, t_max)
@@ -71,13 +91,6 @@ module RayTracer
       end
 
       nil
-    end
-
-    def bounding_box
-      min = @center - @radius * Vector[1, 1, 1]
-      max = @center + @radius * Vector[1, 1, 1]
-      @aabb ||= AABB.new(min, max)
-      @aabb
     end
 
     private
@@ -127,23 +140,8 @@ module RayTracer
       @left = left
       @right = right
 
-      if right
-        b0 = left.bounding_box
-        b1 = right.bounding_box
-        min = Vector[
-          [b0.min[0], b1.min[0]].min,
-          [b0.min[1], b1.min[1]].min,
-          [b0.min[2], b1.min[2]].min,
-        ]
-        max = Vector[
-          [b0.max[0], b1.max[0]].max,
-          [b0.max[1], b1.max[1]].max,
-          [b0.max[2], b1.max[2]].max,
-        ]
-        @aabb = AABB.new(min, max)
-      else
-        @aabb = left.bounding_box
-      end
+      @bounding_box = left.bounding_box
+      @bounding_box += right.bounding_box if right
     end
 
     def self.from_list(list)
@@ -165,7 +163,7 @@ module RayTracer
     end
 
     def hit(ray, t_min, t_max)
-      if @aabb.hit(ray, t_min, t_max)
+      if @bounding_box.hit(ray, t_min, t_max)
         t = t_max
         rec = nil
         left_hit = false
@@ -187,10 +185,6 @@ module RayTracer
       end
 
       nil
-    end
-
-    def bounding_box
-      @aabb
     end
   end
 end
