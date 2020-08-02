@@ -55,13 +55,10 @@ module RayTracer
       rec.material = @material
 
       # uv mapping
-      x = (rec.p[0] - @center[0]) / @radius.to_f
-      y = (rec.p[1] - @center[1]) / @radius.to_f
-      z = (rec.p[2] - @center[2]) / @radius.to_f
-      phi = Math.atan2(x, z) + Math::PI
-      theta = Math.asin(y) + Math::PI / 2
-      rec.u = phi / (2 * Math::PI)
-      rec.v = theta / Math::PI
+      phi = Math.atan2(rec.n[2], rec.n[0])
+      theta = Math.asin(rec.n[1])
+      rec.u = 1 - (phi + Math::PI) / (2 * Math::PI)
+      rec.v = (theta + Math::PI / 2) / Math::PI
 
       rec
     end
