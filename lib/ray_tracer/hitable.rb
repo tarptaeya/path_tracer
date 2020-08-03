@@ -200,6 +200,33 @@ module RayTracer
 end
 
 module RayTracer
+  class Ground < Hitable
+    def initialize(y, material)
+      @y = y
+      @material = material
+      min = Vector[-Float::INFINITY, y, -Float::INFINITY]
+      max = Vector[Float::INFINITY, y, -Float::INFINITY]
+      @bounding_box = AABB.new(min, max)
+    end
+
+    def hit(ray, t_min, t_max)
+      n = Vector[0, 1, 0]
+      t = (Vector[0, @y, 0] - ray.origin).dot(n) / ray.direction.dot(n)
+      if t > t_min && t < t_max
+        rec = HitRecord.new
+        rec.t = t
+        rec.p = ray.point(t)
+        rec.n = n
+        rec.material = @material
+        rec
+      else
+        nil
+      end
+    end
+  end
+end
+
+module RayTracer
   class HitableList < Hitable
     def initialize(objects)
       @objects = objects
