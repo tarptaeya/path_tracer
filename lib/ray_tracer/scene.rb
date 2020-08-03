@@ -16,13 +16,16 @@ module RayTracer
         (0...@width).each do |x|
 
           col = Vector[0, 0, 0]
-          (1..ns).each do
-            i = (x + Random.rand) / @width.to_f
-            j = (y + Random.rand) / @height.to_f
-            ray = @camera.ray(i, j)
-            col += color(ray)
+          (1..ns).each do |s1|
+            (1..ns).each do |s2|
+              i = (x + (s1 - Random.rand) / ns) / @width.to_f
+              j = (y + (s2 - Random.rand) / ns) / @height.to_f
+              ray = @camera.ray(i, j)
+              col += color(ray)
+            end
           end
-          col /= ns.to_f
+
+          col /= (ns * ns).to_f
           data << col
 
           percentage = (y * @width + x) * 100 / (@width * @height - 1)
