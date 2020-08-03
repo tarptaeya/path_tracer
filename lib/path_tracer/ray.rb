@@ -1,4 +1,4 @@
-module RayTracer
+module PathTracer
   class Ray
     attr_reader :origin, :direction
 

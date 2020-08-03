@@ -1,4 +1,4 @@
-module RayTracer
+module PathTracer
   class Camera
     def initialize(lookfrom, lookat, vup, vfov, aspect, aperture = 0, focus_dist = 1)
       @lens_radius = aperture / 2.0

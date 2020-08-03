@@ -1,4 +1,4 @@
-module RayTracer
+module PathTracer
   class Material
     def scatter(ray, rec)
     end
@@ -15,7 +15,7 @@ module RayTracer
   end
 end
 
-module RayTracer
+module PathTracer
   class Lambertian < Material
     def initialize(albedo)
       @albedo = albedo
@@ -30,7 +30,7 @@ module RayTracer
   end
 end
 
-module RayTracer
+module PathTracer
   class Metal < Material
     def initialize(albedo, fuzz=0)
       @albedo = albedo
@@ -50,7 +50,7 @@ module RayTracer
   end
 end
 
-module RayTracer
+module PathTracer
   class DiffuseLight < Material
     def initialize(emit)
       @emit = emit

@@ -1,13 +1,13 @@
 require 'rmagick'
 
-module RayTracer
+module PathTracer
   class Texture
     def value(u, v, p)
     end
   end
 end
 
-module RayTracer
+module PathTracer
   class ConstTexture < Texture
     def initialize(color)
       @color = color
@@ -19,7 +19,7 @@ module RayTracer
   end
 end
 
-module RayTracer
+module PathTracer
   class GroundCheckerTexture < Texture
     def initialize(even, odd, k)
       @even = even
@@ -38,7 +38,7 @@ module RayTracer
   end
 end
 
-module RayTracer
+module PathTracer
   class ImageTexture < Texture
     def initialize(file)
       @image = Magick::ImageList.new(file).first

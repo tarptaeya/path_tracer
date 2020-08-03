@@ -1,4 +1,4 @@
-module RayTracer
+module PathTracer
   def random_in_unit_sphere
     loop do
       p = 2 * Vector[Random.rand, Random.rand, Random.rand] - Vector[1, 1, 1]

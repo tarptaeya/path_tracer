@@ -1,6 +1,6 @@
-require 'ray_tracer'
+require 'path_tracer'
 
-include RayTracer
+include PathTracer
 
 width = 600
 height = 200

@@ -1,11 +1,11 @@
-module RayTracer
+module PathTracer
   class HitRecord
     attr_accessor :t, :p, :n, :material,
       :u, :v
   end
 end
 
-module RayTracer
+module PathTracer
   class AABB
     attr_reader :min, :max
 
@@ -47,7 +47,7 @@ module RayTracer
   end
 end
 
-module RayTracer
+module PathTracer
   class Hitable
     attr_reader :bounding_box
 
@@ -56,7 +56,7 @@ module RayTracer
   end
 end
 
-module RayTracer
+module PathTracer
   class Sphere < Hitable
     attr_reader :center, :radius
 
@@ -113,7 +113,7 @@ module RayTracer
   end
 end
 
-module RayTracer
+module PathTracer
   class Triangle < Hitable
     def initialize(p, material)
       @p = p
@@ -160,7 +160,7 @@ module RayTracer
   end
 end
 
-module RayTracer
+module PathTracer
   class TriangleMesh < Hitable
     def initialize(file, material)
       @triangles = load_obj_file(file, material)
@@ -199,7 +199,7 @@ module RayTracer
   end
 end
 
-module RayTracer
+module PathTracer
   class Ground < Hitable
     def initialize(y, material)
       @y = y
@@ -226,7 +226,7 @@ module RayTracer
   end
 end
 
-module RayTracer
+module PathTracer
   class HitableList < Hitable
     def initialize(objects)
       @objects = objects
@@ -247,7 +247,7 @@ module RayTracer
   end
 end
 
-module RayTracer
+module PathTracer
   class BVHNode < Hitable
     def initialize(left, right)
       @left = left

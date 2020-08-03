@@ -1,4 +1,4 @@
-module RayTracer
+module PathTracer
   MAX_DEPTH = 10
 
   class Scene
