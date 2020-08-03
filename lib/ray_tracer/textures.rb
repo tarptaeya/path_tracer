@@ -20,7 +20,7 @@ module RayTracer
 end
 
 module RayTracer
-  class CheckerTexture < Texture
+  class GroundCheckerTexture < Texture
     def initialize(even, odd, k)
       @even = even
       @odd = odd
@@ -28,7 +28,7 @@ module RayTracer
     end
 
     def value(u, v, p)
-      val = Math.sin(@k * u) * Math.sin(@k * v)
+      val = Math.sin(@k * p[0]) * Math.sin(@k * p[2])
       if val > 0
         @even
       else
