@@ -1,3 +1,5 @@
+require 'parallel'
+
 module PathTracer
   MAX_DEPTH = 10
 
@@ -11,10 +13,11 @@ module PathTracer
 
     def render(ns=1, file="output.ppm")
       puts "writing #{file}"
-      data = []
-      (0...@height).each do |y|
-        (0...@width).each do |x|
 
+      data =
+        Parallel.map(0...@height * @width) do |xy|
+          x = xy % @width
+          y = xy / @width
           col = Vector[0, 0, 0]
           (1..ns).each do |s1|
             (1..ns).each do |s2|
@@ -26,12 +29,12 @@ module PathTracer
           end
 
           col /= (ns * ns).to_f
-          data << col
 
           percentage = (y * @width + x) * 100 / (@width * @height - 1)
           printf("\r[%-20s] %d%%", "=" * (percentage / 5), percentage)
+
+          col
         end
-      end
       puts
 
       File.open(file, "w") do |f|

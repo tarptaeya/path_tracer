@@ -1,12 +1,14 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    parallel (1.19.2)
     rmagick (4.1.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  parallel
   rmagick
 
 BUNDLED WITH
