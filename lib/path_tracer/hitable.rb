@@ -204,8 +204,9 @@ module PathTracer
     def initialize(y, material)
       @y = y
       @material = material
-      min = Vector[-Float::INFINITY, y, -Float::INFINITY]
-      max = Vector[Float::INFINITY, y, -Float::INFINITY]
+      delta = 0.001
+      min = Vector[-Float::INFINITY, y - delta, -Float::INFINITY]
+      max = Vector[Float::INFINITY, y + delta, -Float::INFINITY]
       @bounding_box = AABB.new(min, max)
     end
 
