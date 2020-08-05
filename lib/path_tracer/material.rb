@@ -71,12 +71,13 @@ module PathTracer
     def scatter(ray, rec)
       outer_normal = rec.n
       ni_over_nt = 1.0 / @refractive_index
-      if ray.direction.dot(rec.n) > 0
-        outer_normal *= -1.0
-        ni_over_nt = 1.0 / ni_over_nt
+      incident = ray.direction.normalize
+      if incident.dot(rec.n) > 0
+        outer_normal = -rec.n
+        ni_over_nt = @refractive_index
       end
 
-      if refracted = refract(ray.direction, outer_normal, ni_over_nt)
+      if refracted = refract(incident, outer_normal, ni_over_nt)
         scattered = Ray.new(rec.p, refracted)
         attenuation = @albedo.value(rec.u, rec.v, rec.p)
         [attenuation, scattered]
