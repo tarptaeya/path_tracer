@@ -8,6 +8,7 @@ Path tracer
 - Depth of field
 - Texture mapping
 - Antialiasing
+- Parallel processing
 - Primitives
   - Sphere
   - Triangle
@@ -15,6 +16,7 @@ Path tracer
 - Materials
   - Lambertian
   - Metal
+  - Dielectric
   - Diffuse light
   
 ### Installation
