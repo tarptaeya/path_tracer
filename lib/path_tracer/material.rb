@@ -23,6 +23,12 @@ module PathTracer
         nil
       end
     end
+
+    def schlick(cos, refractive_index)
+      r0 = (1.0 - refractive_index) / (1.0 + refractive_index)
+      r0 = r0 * r0
+      r0 + (1 - r0) * (1 - cos) ** 5
+    end
   end
 end
 
@@ -72,13 +78,21 @@ module PathTracer
       outer_normal = rec.n
       ni_over_nt = 1.0 / @refractive_index
       incident = ray.direction.normalize
+      cosine = -incident.dot(rec.n)
       if incident.dot(rec.n) > 0
         outer_normal = -rec.n
         ni_over_nt = @refractive_index
+        cosine = @refractive_index * incident.dot(rec.n)
       end
 
-      if refracted = refract(incident, outer_normal, ni_over_nt)
+      reflected = reflect(incident, rec.n)
+      probability = schlick(cosine, @refractive_index)
+      if Random.rand > probability && refracted = refract(incident, outer_normal, ni_over_nt)
         scattered = Ray.new(rec.p, refracted)
+        attenuation = @albedo.value(rec.u, rec.v, rec.p)
+        [attenuation, scattered]
+      elsif reflected.dot(rec.n) > 0
+        scattered = Ray.new(rec.p, reflected)
         attenuation = @albedo.value(rec.u, rec.v, rec.p)
         [attenuation, scattered]
       else
